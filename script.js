@@ -633,3 +633,10 @@ function formatNumber(num) {
 function formatNumber(num) {
   return new Intl.NumberFormat('id-ID').format(num);
 }
+// --- 13. FORMAT DATE ---
+function formatDate(dateStr) {
+  // Format YYYY-MM-DD -> DD MMM YYYY
+  const d = new Date(dateStr);
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sept', 'Okt', 'Nov', 'Des'];
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
