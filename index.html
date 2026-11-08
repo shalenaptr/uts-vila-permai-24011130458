@@ -23,8 +23,10 @@
         </nav>
     </header>
 
-    <!-- Bagian Beranda -->
+    <!-- Bagian Konten Utama -->
     <main>
+
+        <!-- Bagian Beranda -->
         <section id="beranda" class="hero">
             <div class="hero-content">
                 <h1>Selamat Datang di Villa Permai</h1>
@@ -46,7 +48,6 @@
 
                 <h2 class="section-title">Villa Kami</h2>
 
-                <!-- Kolom Pencarian Villa -->
                 <div class="search-bar">
                     <input
                         type="text"
@@ -64,14 +65,119 @@
                     </button>
                 </div>
 
-                <!-- Tempat Menampilkan Daftar Villa -->
                 <div id="villaList" class="villa-list">
                 </div>
 
-                <!-- Pesan Jika Villa Tidak Ditemukan -->
                 <div id="villaEmpty" class="villa-empty">
                     Tidak ada villa yang cocok dengan pencarian Anda.
                 </div>
+
+            </div>
+        </section>
+
+        <!-- Bagian Formulir Pemesanan -->
+        <section id="pesan" class="booking-section">
+            <div class="container">
+
+                <h2 class="section-title">Formulir Pemesanan</h2>
+
+                <p class="section-description">
+                    Silakan isi formulir berikut untuk melakukan pemesanan villa.
+                </p>
+
+                <form id="bookingForm">
+
+                    <div class="form-group">
+                        <label for="nama">Nama Lengkap</label>
+                        <input
+                            type="text"
+                            id="nama"
+                            name="nama"
+                            placeholder="Masukkan nama lengkap"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telepon">Nomor Telepon</label>
+                        <input
+                            type="tel"
+                            id="telepon"
+                            name="telepon"
+                            placeholder="Masukkan nomor telepon"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Alamat Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="Masukkan alamat email"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pilihanVilla">Pilih Villa</label>
+                        <select
+                            id="pilihanVilla"
+                            name="pilihanVilla"
+                            required
+                        >
+                            <option value="">Pilih villa terlebih dahulu</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkin">Tanggal Check-in</label>
+                        <input
+                            type="date"
+                            id="checkin"
+                            name="checkin"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkout">Tanggal Check-out</label>
+                        <input
+                            type="date"
+                            id="checkout"
+                            name="checkout"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="jumlahTamu">Jumlah Tamu</label>
+                        <input
+                            type="number"
+                            id="jumlahTamu"
+                            name="jumlahTamu"
+                            min="1"
+                            placeholder="Masukkan jumlah tamu"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="catatan">Catatan Tambahan</label>
+                        <textarea
+                            id="catatan"
+                            name="catatan"
+                            rows="4"
+                            placeholder="Masukkan catatan jika diperlukan"
+                        ></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-pesan">
+                        Kirim Pemesanan
+                    </button>
+
+                </form>
 
             </div>
         </section>
