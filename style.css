@@ -100,3 +100,54 @@ body {
 .site-header__nav a:hover {
   color: var(--color-accent);
 }
+
+/* ============================================
+   HERO SECTION
+   ============================================ */
+.hero {
+  min-height: 620px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 5rem 1.5rem;
+  background: var(--color-secondary);
+}
+
+.hero__content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+  margin-bottom: 1.5rem;
+}
+
+.hero__description {
+  max-width: 650px;
+  margin: 0 auto 2rem;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.hero__button {
+  display: inline-block;
+  padding: 0.9rem 2rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  border-radius: var(--border-radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.hero__button:hover {
+  background: var(--color-accent);
+  transform: translateY(-3px);
+}
