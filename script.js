@@ -625,3 +625,11 @@ function getNights(checkIn, checkOut) {
   const diff = (end - start) / (1000 * 60 * 60 * 24);
   return Math.max(1, Math.ceil(diff));
 }
+// --- 12. FORMAT NUMBER ---
+function formatNumber(num) {
+  return new Intl.NumberFormat('id-ID').format(num);
+}
+// --- 12. FORMAT NUMBER ---
+function formatNumber(num) {
+  return new Intl.NumberFormat('id-ID').format(num);
+}
