@@ -527,3 +527,16 @@ function handleCheckAvailability() {
     showError('Gagal mengecek ketersediaan villa. Silakan coba lagi.');
   }
 }
+// --- 9. PERHITUNGAN HARGA ---
+function hitungTotalHarga(villa, nights) {
+  try {
+    if (!villa || !Number.isFinite(villa.hargaPerMalam) || !Number.isFinite(nights) || nights <= 0) {
+      return null;
+    }
+
+    return villa.hargaPerMalam * nights;
+  } catch (error) {
+    console.error('Gagal menghitung total:', error);
+    return null;
+  }
+}
