@@ -380,3 +380,150 @@ function resetValidationState() {
     setFieldValidationState(field, false);
   });
 }
+// --- 8. VALIDASI FORM (Indonesian) ---
+function validasiForm() {
+  const errors = {};
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+
+  resetValidationState();
+
+  // Reset errors
+  document.getElementById('nameError').textContent = '';
+  document.getElementById('countError').textContent = '';
+  document.getElementById('checkInError').textContent = '';
+  document.getElementById('checkOutError').textContent = '';
+  document.getElementById('villaError').textContent = '';
+
+  // Nama
+  const name = guestNameInput ? guestNameInput.value.trim() : '';
+  if (!name) {
+    errors.name = 'Nama tamu wajib diisi.';
+    setFieldValidationState(guestNameInput, true);
+    showError('Nama tamu wajib diisi.');
+    return false;
+  }
+
+  // Jumlah tamu
+  const countValue = guestCountInput ? guestCountInput.value.trim() : '';
+  const count = countValue ? parseInt(countValue, 10) : NaN;
+  if (!countValue || isNaN(count) || count < 1 || count > 10) {
+    errors.count = 'Jumlah tamu harus antara 1 sampai 10.';
+    setFieldValidationState(guestCountInput, true);
+    showError('Jumlah tamu harus antara 1 sampai 10.');
+    return false;
+  }
+
+  // Check-in
+  const checkIn = checkInInput ? checkInInput.value : '';
+  if (!checkIn) {
+    errors.checkIn = 'Tanggal check-in wajib diisi.';
+    setFieldValidationState(checkInInput, true);
+    showError('Tanggal check-in wajib diisi.');
+    return false;
+  }
+
+  if (checkIn < today) {
+    errors.checkIn = 'Tanggal check-in tidak boleh di masa lalu.';
+    setFieldValidationState(checkInInput, true);
+    showError('Tanggal check-in tidak boleh di masa lalu.');
+    return false;
+  }
+
+  // Check-out
+  const checkOut = checkOutInput ? checkOutInput.value : '';
+  if (!checkOut) {
+    errors.checkOut = 'Tanggal check-out wajib diisi.';
+    setFieldValidationState(checkOutInput, true);
+    showError('Tanggal check-out wajib diisi.');
+    return false;
+  }
+
+  if (checkOut <= checkIn) {
+    errors.checkOut = 'Tanggal check-out harus setelah tanggal check-in.';
+    setFieldValidationState(checkOutInput, true);
+    showError('Tanggal check-out harus setelah tanggal check-in.');
+    return false;
+  }
+
+  // Villa
+  const villaId = villaSelect ? parseInt(villaSelect.value, 10) : NaN;
+  if (isNaN(villaId) || villaId <= 0) {
+    errors.villa = 'Pilih unit vila terlebih dahulu.';
+    setFieldValidationState(villaSelect, true);
+    showError('Pilih unit vila terlebih dahulu.');
+    return false;
+  }
+
+  return !Object.values(errors).some((message) => Boolean(message));
+}
+
+function showError(message) {
+  if (resultArea) {
+    resultArea.className = 'result-area';
+    resultArea.innerHTML = `
+      <div class="result-message result-message--error">
+        <strong>Perhatian:</strong> ${message}
+      </div>
+    `;
+  }
+
+  if (orderSuccess) {
+    orderSuccess.textContent = '';
+    orderSuccess.classList.remove('order-success--visible');
+  }
+}
+
+function handleCheckAvailability() {
+  try {
+    const villaId = villaSelect ? parseInt(villaSelect.value, 10) : NaN;
+    if (isNaN(villaId) || villaId <= 0) {
+      showError('Pilih unit villa terlebih dahulu.');
+      return;
+    }
+
+    const villa = villaData.find(item => item.id === villaId);
+    if (!villa) {
+      showError('Villa yang dipilih tidak ditemukan.');
+      return;
+    }
+
+    const checkIn = checkInInput ? checkInInput.value : '';
+    const checkOut = checkOutInput ? checkOutInput.value : '';
+    if (!checkIn || !checkOut) {
+      showError('Isi tanggal check-in dan check-out terlebih dahulu.');
+      return;
+    }
+
+    const nightsFromInput = nightsInput ? parseInt(nightsInput.value, 10) : NaN;
+    const nights = Number.isFinite(nightsFromInput) && nightsFromInput > 0
+      ? nightsFromInput
+      : getNights(checkIn, checkOut);
+    const total = hitungTotalHarga(villa, nights);
+
+    if (resultArea) {
+      resultArea.className = 'result-area';
+      resultArea.innerHTML = `
+        <div class="result-summary">
+          <div class="result-summary__header">
+            <span class="result-summary__badge result-summary__badge--${villa.status === 'available' ? 'available' : 'booked'}">
+              ${villa.status === 'available' ? 'Tersedia' : 'Habis Datang'}
+            </span>
+            <h3>Ketersediaan</h3>
+          </div>
+          <div class="result-summary__grid">
+            <div class="result-summary__item"><span>Villa</span><strong>${villa.nama}</strong></div>
+            <div class="result-summary__item"><span>Status</span><strong>${villa.status === 'available' ? 'Tersedia' : 'Habis Datang'}</strong></div>
+            <div class="result-summary__item"><span>Check-in</span><strong>${formatDate(checkIn)}</strong></div>
+            <div class="result-summary__item"><span>Check-out</span><strong>${formatDate(checkOut)}</strong></div>
+            <div class="result-summary__item"><span>Jumlah Malam</span><strong>${nights}</strong></div>
+            <div class="result-summary__item result-summary__item--wide"><span>Estimasi Total</span><strong>Rp ${formatNumber(total)}</strong></div>
+          </div>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Gagal mengecek ketersediaan:', error);
+    showError('Gagal mengecek ketersediaan villa. Silakan coba lagi.');
+  }
+}
