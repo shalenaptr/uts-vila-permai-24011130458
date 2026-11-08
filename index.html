@@ -2,228 +2,151 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Villa Permai</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Villa Permai</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo__text">Villa Permai</span>
+      </div>
+      <nav class="main-nav">
+        <ul class="main-nav__list">
+          <li><a href="#beranda" class="main-nav__link">Beranda</a></li>
+          <li><a href="#villas" class="main-nav__link">Villa</a></li>
+          <li><a href="#pesan" class="main-nav__link">Pesan</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
-    <!-- Bagian Header -->
-    <header>
-        <div class="logo">
-            <h2>Villa Permai</h2>
+  <main id="beranda">
+    <section class="hero">
+      <div class="container hero-content">
+        <h1 class="hero__title">Selamat Datang di Villa Permai</h1>
+        <p class="hero__subtitle">Nikmati kemewahan dan ketenangan di pemukiman mewah kami</p>
+      </div>
+    </section>
+
+    <section id="villas" class="villas-section">
+      <div class="container">
+        <h2 class="section-title">Villa Kami</h2>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="Cari nama atau lokasi vila..."
+          >
+          <button id="filterBtn" class="btn btn--outline">Cari</button>
         </div>
+        <div id="villaList" class="villa-list"></div>
+        <div id="villaEmpty" class="villa-empty">Tidak ada vila yang cocok dengan pencarian Anda</div>
+      </div>
+    </section>
 
-        <nav>
-            <ul>
-                <li><a href="#beranda">Beranda</a></li>
-                <li><a href="#villas">Villa</a></li>
-                <li><a href="#pesan">Pesan</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <!-- Bagian Konten Utama -->
-    <main>
-
-        <!-- Bagian Beranda -->
-        <section id="beranda" class="hero">
-            <div class="hero-content">
-                <h1>Selamat Datang di Villa Permai</h1>
-
-                <p>
-                    Nikmati pengalaman menginap yang nyaman,
-                    tenang, dan menyenangkan bersama keluarga.
-                </p>
-
-                <a href="#villas" class="btn-pesan">
-                    Lihat Villa
-                </a>
+    <section id="pesan" class="booking-section">
+      <div class="container">
+        <h2 class="section-title">Buku Sekarang</h2>
+        <form id="bookingForm" class="booking-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="guestName">Nama Tamu <span class="required">*</span></label>
+              <input
+                type="text"
+                id="guestName"
+                class="form-input"
+                placeholder="Masukkan nama lengkap Anda"
+                required
+              >
+              <span class="error-message" id="nameError"></span>
             </div>
-        </section>
-
-        <!-- Bagian Daftar Villa -->
-        <section id="villas" class="villas-section">
-            <div class="container">
-
-                <h2 class="section-title">Villa Kami</h2>
-
-                <div class="search-bar">
-                    <input
-                        type="text"
-                        id="searchInput"
-                        class="search-input"
-                        placeholder="Cari nama atau lokasi villa..."
-                    >
-
-                    <button
-                        type="button"
-                        id="filterBtn"
-                        class="btn btn--outline"
-                    >
-                        Cari
-                    </button>
-                </div>
-
-                <div id="villaList" class="villa-list">
-                </div>
-
-                <div id="villaEmpty" class="villa-empty">
-                    Tidak ada villa yang cocok dengan pencarian Anda.
-                </div>
-
+            <div class="form-group">
+              <label for="guestCount">Jumlah Tamu <span class="required">*</span></label>
+              <input
+                type="number"
+                id="guestCount"
+                class="form-input"
+                placeholder="1–10 orang"
+                min="1"
+                max="10"
+                value="1"
+              >
+              <span class="error-message" id="countError"></span>
             </div>
-        </section>
+          </div>
 
-        <!-- Bagian Formulir Pemesanan -->
-        <section id="pesan" class="booking-section">
-            <div class="container">
-
-                <h2 class="section-title">Formulir Pemesanan</h2>
-
-                <p class="section-description">
-                    Silakan isi formulir berikut untuk melakukan pemesanan villa.
-                </p>
-
-                <form id="bookingForm">
-
-                    <div class="form-group">
-                        <label for="nama">Nama Lengkap</label>
-                        <input
-                            type="text"
-                            id="nama"
-                            name="nama"
-                            placeholder="Masukkan nama lengkap"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="telepon">Nomor Telepon</label>
-                        <input
-                            type="tel"
-                            id="telepon"
-                            name="telepon"
-                            placeholder="Masukkan nomor telepon"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Alamat Email</label>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            placeholder="Masukkan alamat email"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="pilihanVilla">Pilih Villa</label>
-                        <select
-                            id="pilihanVilla"
-                            name="pilihanVilla"
-                            required
-                        >
-                            <option value="">Pilih villa terlebih dahulu</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="checkin">Tanggal Check-in</label>
-                        <input
-                            type="date"
-                            id="checkin"
-                            name="checkin"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="checkout">Tanggal Check-out</label>
-                        <input
-                            type="date"
-                            id="checkout"
-                            name="checkout"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="jumlahTamu">Jumlah Tamu</label>
-                        <input
-                            type="number"
-                            id="jumlahTamu"
-                            name="jumlahTamu"
-                            min="1"
-                            placeholder="Masukkan jumlah tamu"
-                            required
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="catatan">Catatan Tambahan</label>
-                        <textarea
-                            id="catatan"
-                            name="catatan"
-                            rows="4"
-                            placeholder="Masukkan catatan jika diperlukan"
-                        ></textarea>
-                    </div>
-
-                    <button type="submit" class="btn-pesan">
-                        Kirim Pemesanan
-                    </button>
-
-                </form>
-
+          <div class="form-row">
+            <div class="form-group">
+              <label for="checkIn">Check-in <span class="required">*</span></label>
+              <input
+                type="date"
+                id="checkIn"
+                class="form-input"
+                required
+              >
+              <span class="error-message" id="checkInError"></span>
             </div>
-        </section>
-
-    </main>
-
-    <!-- Bagian Footer -->
-    <footer class="footer">
-        <div class="container">
-
-            <div class="footer-content">
-
-                <div class="footer-info">
-                    <h2>Villa Permai</h2>
-                    <p>
-                        Tempat istirahat yang nyaman untuk
-                        menikmati waktu bersama keluarga.
-                    </p>
-                </div>
-
-                <div class="footer-menu">
-                    <h3>Navigasi</h3>
-                    <ul>
-                        <li><a href="#beranda">Beranda</a></li>
-                        <li><a href="#villas">Daftar Villa</a></li>
-                        <li><a href="#pesan">Pemesanan</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-contact">
-                    <h3>Informasi</h3>
-                    <p>Informasi dan layanan Villa Permai</p>
-                    <p>Hubungi kami untuk informasi pemesanan.</p>
-                </div>
-
+            <div class="form-group">
+              <label for="checkOut">Check-out <span class="required">*</span></label>
+              <input
+                type="date"
+                id="checkOut"
+                class="form-input"
+                required
+              >
+              <span class="error-message" id="checkOutError"></span>
             </div>
+          </div>
 
-            <div class="footer-bottom">
-                <p>
-                    &copy; 2026 Villa Permai.
-                    Hak Cipta Dilindungi.
-                </p>
-            </div>
+          <div class="form-group">
+            <label for="villaSelect">Pilih Villa <span class="required">*</span></label>
+            <select id="villaSelect" class="form-select">
+              <option value="">-- Pilih Villa --</option>
+            </select>
+            <span class="error-message" id="villaError"></span>
+          </div>
 
-        </div>
-    </footer>
+          <div class="form-group">
+            <label for="nightsInput">Jumlah Malam (otomatis)</label>
+            <input
+              type="number"
+              id="nightsInput"
+              class="form-input"
+              min="1"
+              value="1"
+            >
+          </div>
 
+          <div class="form-actions">
+            <button type="button" id="checkAvailabilityBtn" class="btn btn--primary">Cek Ketersediaan</button>
+            <button type="submit" id="orderBtn" class="btn btn--primary">Pesan Sekarang</button>
+          </div>
+
+          <div id="resultArea" class="result-area"></div>
+          <div id="orderSuccess" class="order-success"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-contact">
+        <h3 class="footer-contact__title">Kontak Pemilik</h3>
+        <p class="footer-contact__info">Email: permai.villa@example.com</p>
+        <p class="footer-contact__info">Telepon: (0361) 123 456</p>
+        <p class="footer-contact__info">Alamat: Jl. Raya Permai No. 45, Ubud, Bali 80571</p>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Villa Permai. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
