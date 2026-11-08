@@ -540,3 +540,81 @@ function hitungTotalHarga(villa, nights) {
     return null;
   }
 }
+// --- 10. HANDLER FORM ---
+function handleFormSubmit(e) {
+  e.preventDefault();
+
+  try {
+    if (!validasiForm()) {
+      return;
+    }
+
+    const name = guestNameInput.value.trim();
+    const count = parseInt(guestCountInput.value, 10);
+    const checkIn = checkInInput.value;
+    const checkOut = checkOutInput.value;
+    const villaId = parseInt(villaSelect.value, 10);
+
+    const villa = villaData.find(item => item.id === villaId);
+
+    if (!villa) {
+      showError('Villa yang dipilih tidak ditemukan.');
+      return;
+    }
+
+    if (villa.status !== 'available') {
+      showError('Maaf, villa ini sedang tidak tersedia.');
+      return;
+    }
+
+    const nights = getNights(checkIn, checkOut);
+    const total = hitungTotalHarga(villa, nights);
+
+    if (total === null) {
+      showError('Gagal menghitung total harga.');
+      return;
+    }
+
+    const order = {
+      id: Date.now(),
+      namaTamu: name,
+      jumlahTamu: count,
+      namaVilla: villa.nama,
+      villaId: villa.id,
+      checkIn: checkIn,
+      checkOut: checkOut,
+      jumlahMalam: nights,
+      totalHarga: total,
+      tanggalPesan: new Date().toISOString()
+    };
+
+    orders.push(order);
+    saveOrdersToStorage();
+
+    if (orderSuccess) {
+      orderSuccess.textContent = `Pemesanan berhasil! Terima kasih, ${name}.`;
+      orderSuccess.classList.add('order-success--visible');
+    }
+
+    if (resultArea) {
+      resultArea.className = 'result-area';
+      resultArea.innerHTML = `
+        <div class="result-message result-message--success">
+          <strong>Pemesanan Berhasil!</strong>
+          <p>Villa ${villa.nama} berhasil dipesan.</p>
+          <p>Total pembayaran: <strong>Rp ${formatNumber(total)}</strong></p>
+          <p>Jumlah malam: ${nights}</p>
+        </div>
+      `;
+    }
+
+    form.reset();
+    updateNightsInput();
+    resetValidationState();
+
+    console.log('Pemesanan berhasil:', order);
+  } catch (error) {
+    console.error('Gagal memproses pemesanan:', error);
+    showError('Terjadi kesalahan saat memproses pemesanan.');
+  }
+}
