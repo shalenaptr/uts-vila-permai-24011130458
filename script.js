@@ -1,10 +1,3 @@
-/**
- * Villa Permai — Script JavaScript
- * 
- * Mengelola data villa, render kartu, validasi form,
- * perhitungan harga, localStorage, dan error handling.
- */
-
 // --- 1. DATA (array objek) ---
 const villaData = [
   {
@@ -54,3 +47,50 @@ let form = null;
 let resultArea = null;
 let orderSuccess = null;
 let orders = [];
+
+// --- 3. INITIALISASI HALAMAN ---
+function initPage() {
+  try {
+    // Cari elemen
+    villaListElement = document.getElementById('villaList');
+    villaEmptyElement = document.getElementById('villaEmpty');
+    searchInput = document.getElementById('searchInput');
+    filterBtn = document.getElementById('filterBtn');
+    villaSelect = document.getElementById('villaSelect');
+    checkInInput = document.getElementById('checkIn');
+    checkOutInput = document.getElementById('checkOut');
+    nightsInput = document.getElementById('nightsInput');
+    guestCountInput = document.getElementById('guestCount');
+    guestNameInput = document.getElementById('guestName');
+    form = document.getElementById('bookingForm');
+    resultArea = document.getElementById('resultArea');
+    orderSuccess = document.getElementById('orderSuccess');
+
+    if (!villaListElement || !villaSelect) {
+      throw new Error('Elemen utama halaman tidak ditemukan.');
+    }
+
+    // Render awal
+    renderVillas();
+    populateVillaDropdown();
+
+    // Load orders dari localStorage
+    loadOrdersFromStorage();
+
+    // Event listeners
+    setupEventListeners();
+    updateNightsInput();
+
+    // Lakukan pencarian pada awal (localStorage) - hanya jika ada
+    const savedSearch = localStorage.getItem('villaSearchQuery');
+    if (savedSearch) {
+      searchInput.value = savedSearch;
+      performSearch(savedSearch);
+    }
+
+    console.log('Halaman Villa Permai berhasil dimuat.');
+  } catch (error) {
+    console.error('Gagal inisialisasi:', error);
+    showError('Tidak dapat memuat data vila. Silakan muat ulang halaman.');
+  }
+}
