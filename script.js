@@ -239,3 +239,38 @@ function populateVillaDropdown() {
     console.error('Gagal mengisi dropdown:', error);
   }
 }
+// --- 6. PENCARIAN / FILTER ---
+function performSearch(query) {
+  try {
+    if (!villaListElement) return;
+
+    const searchQuery = query.trim().toLowerCase();
+
+    // Filter data
+    const filtered = villaData.filter(villa => {
+      return (
+        villa.nama.toLowerCase().includes(searchQuery) ||
+        villa.lokasi.toLowerCase().includes(searchQuery) ||
+        villa.tipeKamar.toLowerCase().includes(searchQuery)
+      );
+    });
+
+    clearVillaList();
+
+    if (filtered.length === 0) {
+      showEmptyState();
+      return;
+    }
+
+    if (villaEmptyElement) {
+      villaEmptyElement.style.display = 'none';
+    }
+
+    filtered.forEach((villa, index) => {
+      createVillaCard(villa, index);
+    });
+  } catch (error) {
+    console.error('Gagal melakukan pencarian:', error);
+    showError('Terjadi kesalahan saat mencari villa.');
+  }
+}
