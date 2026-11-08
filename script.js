@@ -618,3 +618,10 @@ function handleFormSubmit(e) {
     showError('Terjadi kesalahan saat memproses pemesanan.');
   }
 }
+// --- 11. GET NIGHTS ---
+function getNights(checkIn, checkOut) {
+  const start = new Date(checkIn);
+  const end = new Date(checkOut);
+  const diff = (end - start) / (1000 * 60 * 60 * 24);
+  return Math.max(1, Math.ceil(diff));
+}
