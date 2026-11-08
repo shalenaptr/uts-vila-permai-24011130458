@@ -39,6 +39,43 @@
                 </a>
             </div>
         </section>
+
+        <!-- Bagian Daftar Villa -->
+        <section id="villas" class="villas-section">
+            <div class="container">
+
+                <h2 class="section-title">Villa Kami</h2>
+
+                <!-- Kolom Pencarian Villa -->
+                <div class="search-bar">
+                    <input
+                        type="text"
+                        id="searchInput"
+                        class="search-input"
+                        placeholder="Cari nama atau lokasi villa..."
+                    >
+
+                    <button
+                        type="button"
+                        id="filterBtn"
+                        class="btn btn--outline"
+                    >
+                        Cari
+                    </button>
+                </div>
+
+                <!-- Tempat Menampilkan Daftar Villa -->
+                <div id="villaList" class="villa-list">
+                </div>
+
+                <!-- Pesan Jika Villa Tidak Ditemukan -->
+                <div id="villaEmpty" class="villa-empty">
+                    Tidak ada villa yang cocok dengan pencarian Anda.
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
 </body>
