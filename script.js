@@ -274,3 +274,109 @@ function performSearch(query) {
     showError('Terjadi kesalahan saat mencari villa.');
   }
 }
+// --- 7. EVENT LISTENERS ---
+function setupEventListeners() {
+  try {
+    // Filter button
+    if (filterBtn && searchInput) {
+      filterBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim();
+        if (query) {
+          performSearch(query);
+        }
+      });
+    }
+
+    // Search input (Enter key)
+    if (searchInput) {
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const query = searchInput.value.trim();
+          if (query) {
+            performSearch(query);
+          }
+        }
+      });
+    }
+
+    // Form submit
+    if (form) {
+      form.addEventListener('submit', handleFormSubmit);
+    }
+
+    // Auto-update jumlah malam dari tanggal
+    [checkInInput, checkOutInput].forEach((field) => {
+      if (!field) return;
+
+      field.addEventListener('input', updateNightsInput);
+      field.addEventListener('change', updateNightsInput);
+    });
+
+    if (nightsInput) {
+      nightsInput.addEventListener('input', () => {
+        const value = parseInt(nightsInput.value, 10);
+        if (!Number.isNaN(value) && value > 0) {
+          nightsInput.value = value;
+        }
+      });
+    }
+
+    // Highlight invalid fields immediately when user edits them
+    [guestNameInput, guestCountInput, checkInInput, checkOutInput, villaSelect].forEach((field) => {
+      if (!field) return;
+
+      field.addEventListener('input', () => {
+        setFieldValidationState(field, false);
+      });
+
+      field.addEventListener('change', () => {
+        setFieldValidationState(field, false);
+      });
+    });
+
+    // Booking buttons
+    const checkBtn = document.getElementById('checkAvailabilityBtn');
+    const orderBtn = document.getElementById('orderBtn');
+
+    if (checkBtn) {
+      checkBtn.addEventListener('click', handleCheckAvailability);
+    }
+
+    if (orderBtn) {
+      // "Pesan Sekarang" juga memicu submit
+      orderBtn.addEventListener('click', () => {
+        form.requestSubmit();
+      });
+    }
+  } catch (error) {
+    console.error('Gagal menyiapkan event listeners:', error);
+  }
+}
+
+function updateNightsInput() {
+  if (!nightsInput || !checkInInput || !checkOutInput) {
+    return;
+  }
+
+  const checkIn = checkInInput.value;
+  const checkOut = checkOutInput.value;
+
+  if (!checkIn || !checkOut) {
+    nightsInput.value = 1;
+    return;
+  }
+
+  const nights = getNights(checkIn, checkOut);
+  nightsInput.value = nights;
+}
+
+function setFieldValidationState(field, isInvalid) {
+  if (!field) return;
+  field.classList.toggle('is-invalid', isInvalid);
+}
+
+function resetValidationState() {
+  [guestNameInput, guestCountInput, checkInInput, checkOutInput, villaSelect].forEach((field) => {
+    setFieldValidationState(field, false);
+  });
+}
