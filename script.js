@@ -640,3 +640,33 @@ function formatDate(dateStr) {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sept', 'Okt', 'Nov', 'Des'];
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
+// --- 14. LOCAL STORAGE ---
+function saveOrdersToStorage() {
+  try {
+    localStorage.setItem('villaOrders', JSON.stringify(orders));
+  } catch (error) {
+    console.error('Gagal menyimpan orders:', error);
+  }
+}
+
+function loadOrdersFromStorage() {
+  try {
+    const stored = localStorage.getItem('villaOrders');
+    if (stored) {
+      orders = JSON.parse(stored);
+      console.log(`Loaded ${orders.length} saved orders from localStorage.`);
+    }
+  } catch (error) {
+    console.error('Gagal memuat orders dari localStorage:', error);
+    orders = [];
+  }
+}
+
+function getLastGuest() {
+  try {
+    return localStorage.getItem('lastGuestName') || '';
+  } catch (error) {
+    console.error('Gagal mengambil lastGuestName:', error);
+    return '';
+  }
+}
