@@ -220,3 +220,22 @@ function showEmptyState() {
     villaListElement.innerHTML = '';
   }
 }
+
+// --- 5. DROPDOWN Pilihan Villa ---
+function populateVillaDropdown() {
+  try {
+    if (!villaSelect) return;
+
+    // Kosongkan dulu
+    villaSelect.innerHTML = '<option value="">-- Pilih Villa --</option>';
+
+    villaData.forEach(villa => {
+      const option = document.createElement('option');
+      option.value = villa.id;
+      option.textContent = `${villa.nama} - ${villa.tipeKamar}`;
+      villaSelect.appendChild(option);
+    });
+  } catch (error) {
+    console.error('Gagal mengisi dropdown:', error);
+  }
+}
