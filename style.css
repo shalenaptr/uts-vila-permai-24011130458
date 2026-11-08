@@ -1,0 +1,56 @@
+
+/* ============================================
+   VARIABLES & RESET
+   ============================================ */
+:root {
+  --color-primary: #2d2a2a;
+  --color-secondary: #f1eeea;
+  --color-accent: #b99a78;
+  --color-bg: #ffffff;
+  --color-card: #fffcf9;
+  --color-text: #252221;
+  --color-text-light: #726763;
+  --color-border: #efeae4;
+  --color-success: #6f7d68;
+  --color-warning: #b99469;
+  --font-main: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-heading: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2.5rem;
+  --spacing-xl: 4rem;
+  --border-radius: 12px;
+  --border-radius-lg: 18px;
+  --shadow-sm: 0 10px 22px rgba(45, 42, 42, 0.04);
+  --shadow-md: 0 18px 30px rgba(45, 42, 42, 0.06);
+  --shadow-lg: 0 26px 42px rgba(45, 42, 42, 0.08);
+  --transition: 0.28s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-sm);
+}
