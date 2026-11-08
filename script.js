@@ -670,3 +670,11 @@ function getLastGuest() {
     return '';
   }
 }
+// --- 15. ERROR HANDLER GLOBAL ---
+window.addEventListener('error', (e) => {
+  console.error('Error global:', e.message);
+  showError('Terjadi kesalahan yang tidak terduga. Silakan muat ulang.');
+});
+
+// --- 16. JALANKAN ---
+document.addEventListener('DOMContentLoaded', initPage);
