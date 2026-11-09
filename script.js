@@ -51,7 +51,6 @@ let orders = [];
 // --- 3. INITIALISASI HALAMAN ---
 function initPage() {
   try {
-    // Cari elemen
     villaListElement = document.getElementById('villaList');
     villaEmptyElement = document.getElementById('villaEmpty');
     searchInput = document.getElementById('searchInput');
@@ -70,23 +69,14 @@ function initPage() {
       throw new Error('Elemen utama halaman tidak ditemukan.');
     }
 
-    // Render awal
     renderVillas();
     populateVillaDropdown();
-
-    // Load orders dari localStorage
     loadOrdersFromStorage();
-
-    // Event listeners
     setupEventListeners();
     updateNightsInput();
 
-    // Lakukan pencarian pada awal (localStorage) - hanya jika ada
-    const savedSearch = localStorage.getItem('villaSearchQuery');
-    if (savedSearch) {
-      searchInput.value = savedSearch;
-      performSearch(savedSearch);
-    }
+    // Sembunyikan pesan pencarian saat halaman pertama dibuka.
+    hideEmptyState();
 
     console.log('Halaman Villa Permai berhasil dimuat.');
   } catch (error) {
@@ -95,34 +85,15 @@ function initPage() {
   }
 }
 
-// --- 4. RENDER VILLA (createElement + appendChild) ---
+// --- 4. RENDER VILLA ---
 function renderVillas() {
   try {
     clearVillaList();
+    hideEmptyState();
 
-    const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
-    const filtered = villaData.filter(villa => {
-      if (!searchQuery) return true;
-      return (
-        villa.nama.toLowerCase().includes(searchQuery) ||
-        villa.lokasi.toLowerCase().includes(searchQuery) ||
-        villa.tipeKamar.toLowerCase().includes(searchQuery)
-      );
-    });
-
-    if (filtered.length === 0) {
-      showEmptyState();
-      return;
-    }
-
-    filtered.forEach((villa, index) => {
+    villaData.forEach((villa, index) => {
       createVillaCard(villa, index);
     });
-
-    // Simpan last search
-    if (searchInput) {
-      localStorage.setItem('villaSearchQuery', searchInput.value);
-    }
   } catch (error) {
     console.error('Gagal merender villa:', error);
     showError('Gagal menampilkan daftar villa.');
@@ -131,12 +102,10 @@ function renderVillas() {
 
 function createVillaCard(villa, index) {
   try {
-    // Buat elemen card
     const article = document.createElement('article');
     article.className = 'villa-card';
     article.dataset.villaId = villa.id;
 
-    // Header (title + status badge)
     const header = document.createElement('div');
     header.className = 'villa-card__header';
 
@@ -152,7 +121,6 @@ function createVillaCard(villa, index) {
     header.appendChild(statusBadge);
     article.appendChild(header);
 
-    // Body details
     const body = document.createElement('div');
     body.className = 'villa-card__body';
 
@@ -171,7 +139,6 @@ function createVillaCard(villa, index) {
 
     body.appendChild(details);
 
-    // Facilities
     const facilitiesList = document.createElement('div');
     facilitiesList.className = 'villa-card__facilities';
 
@@ -184,7 +151,6 @@ function createVillaCard(villa, index) {
 
     body.appendChild(facilitiesList);
 
-    // Price
     const priceContainer = document.createElement('div');
     priceContainer.className = 'villa-card__price';
 
@@ -197,7 +163,6 @@ function createVillaCard(villa, index) {
 
     article.appendChild(body);
 
-    // Append to container
     if (villaListElement) {
       villaListElement.appendChild(article);
     }
@@ -216,17 +181,23 @@ function showEmptyState() {
   if (villaEmptyElement) {
     villaEmptyElement.style.display = 'block';
   }
+
   if (villaListElement) {
     villaListElement.innerHTML = '';
   }
 }
 
-// --- 5. DROPDOWN Pilihan Villa ---
+function hideEmptyState() {
+  if (villaEmptyElement) {
+    villaEmptyElement.style.display = 'none';
+  }
+}
+
+// --- 5. DROPDOWN PILIHAN VILLA ---
 function populateVillaDropdown() {
   try {
     if (!villaSelect) return;
 
-    // Kosongkan dulu
     villaSelect.innerHTML = '<option value="">-- Pilih Villa --</option>';
 
     villaData.forEach(villa => {
@@ -239,6 +210,7 @@ function populateVillaDropdown() {
     console.error('Gagal mengisi dropdown:', error);
   }
 }
+
 // --- 6. PENCARIAN / FILTER ---
 function performSearch(query) {
   try {
@@ -246,7 +218,12 @@ function performSearch(query) {
 
     const searchQuery = query.trim().toLowerCase();
 
-    // Filter data
+    // Jika pencarian kosong, tampilkan semua villa.
+    if (!searchQuery) {
+      renderVillas();
+      return;
+    }
+
     const filtered = villaData.filter(villa => {
       return (
         villa.nama.toLowerCase().includes(searchQuery) ||
@@ -262,9 +239,7 @@ function performSearch(query) {
       return;
     }
 
-    if (villaEmptyElement) {
-      villaEmptyElement.style.display = 'none';
-    }
+    hideEmptyState();
 
     filtered.forEach((villa, index) => {
       createVillaCard(villa, index);
@@ -274,37 +249,28 @@ function performSearch(query) {
     showError('Terjadi kesalahan saat mencari villa.');
   }
 }
+
 // --- 7. EVENT LISTENERS ---
 function setupEventListeners() {
   try {
-    // Filter button
     if (filterBtn && searchInput) {
       filterBtn.addEventListener('click', () => {
-        const query = searchInput.value.trim();
-        if (query) {
-          performSearch(query);
-        }
+        performSearch(searchInput.value);
       });
     }
 
-    // Search input (Enter key)
     if (searchInput) {
       searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-          const query = searchInput.value.trim();
-          if (query) {
-            performSearch(query);
-          }
+          performSearch(searchInput.value);
         }
       });
     }
 
-    // Form submit
     if (form) {
       form.addEventListener('submit', handleFormSubmit);
     }
 
-    // Auto-update jumlah malam dari tanggal
     [checkInInput, checkOutInput].forEach((field) => {
       if (!field) return;
 
@@ -321,7 +287,6 @@ function setupEventListeners() {
       });
     }
 
-    // Highlight invalid fields immediately when user edits them
     [guestNameInput, guestCountInput, checkInInput, checkOutInput, villaSelect].forEach((field) => {
       if (!field) return;
 
@@ -334,7 +299,6 @@ function setupEventListeners() {
       });
     });
 
-    // Booking buttons
     const checkBtn = document.getElementById('checkAvailabilityBtn');
     const orderBtn = document.getElementById('orderBtn');
 
@@ -343,9 +307,10 @@ function setupEventListeners() {
     }
 
     if (orderBtn) {
-      // "Pesan Sekarang" juga memicu submit
       orderBtn.addEventListener('click', () => {
-        form.requestSubmit();
+        if (form) {
+          form.requestSubmit();
+        }
       });
     }
   } catch (error) {
@@ -380,7 +345,8 @@ function resetValidationState() {
     setFieldValidationState(field, false);
   });
 }
-// --- 8. VALIDASI FORM (Indonesian) ---
+
+// --- 8. VALIDASI FORM ---
 function validasiForm() {
   const errors = {};
   const now = new Date();
@@ -388,14 +354,12 @@ function validasiForm() {
 
   resetValidationState();
 
-  // Reset errors
   document.getElementById('nameError').textContent = '';
   document.getElementById('countError').textContent = '';
   document.getElementById('checkInError').textContent = '';
   document.getElementById('checkOutError').textContent = '';
   document.getElementById('villaError').textContent = '';
 
-  // Nama
   const name = guestNameInput ? guestNameInput.value.trim() : '';
   if (!name) {
     errors.name = 'Nama tamu wajib diisi.';
@@ -404,9 +368,9 @@ function validasiForm() {
     return false;
   }
 
-  // Jumlah tamu
   const countValue = guestCountInput ? guestCountInput.value.trim() : '';
   const count = countValue ? parseInt(countValue, 10) : NaN;
+
   if (!countValue || isNaN(count) || count < 1 || count > 10) {
     errors.count = 'Jumlah tamu harus antara 1 sampai 10.';
     setFieldValidationState(guestCountInput, true);
@@ -414,8 +378,8 @@ function validasiForm() {
     return false;
   }
 
-  // Check-in
   const checkIn = checkInInput ? checkInInput.value : '';
+
   if (!checkIn) {
     errors.checkIn = 'Tanggal check-in wajib diisi.';
     setFieldValidationState(checkInInput, true);
@@ -430,8 +394,8 @@ function validasiForm() {
     return false;
   }
 
-  // Check-out
   const checkOut = checkOutInput ? checkOutInput.value : '';
+
   if (!checkOut) {
     errors.checkOut = 'Tanggal check-out wajib diisi.';
     setFieldValidationState(checkOutInput, true);
@@ -446,8 +410,8 @@ function validasiForm() {
     return false;
   }
 
-  // Villa
   const villaId = villaSelect ? parseInt(villaSelect.value, 10) : NaN;
+
   if (isNaN(villaId) || villaId <= 0) {
     errors.villa = 'Pilih unit vila terlebih dahulu.';
     setFieldValidationState(villaSelect, true);
@@ -477,12 +441,14 @@ function showError(message) {
 function handleCheckAvailability() {
   try {
     const villaId = villaSelect ? parseInt(villaSelect.value, 10) : NaN;
+
     if (isNaN(villaId) || villaId <= 0) {
       showError('Pilih unit villa terlebih dahulu.');
       return;
     }
 
     const villa = villaData.find(item => item.id === villaId);
+
     if (!villa) {
       showError('Villa yang dipilih tidak ditemukan.');
       return;
@@ -490,6 +456,7 @@ function handleCheckAvailability() {
 
     const checkIn = checkInInput ? checkInInput.value : '';
     const checkOut = checkOutInput ? checkOutInput.value : '';
+
     if (!checkIn || !checkOut) {
       showError('Isi tanggal check-in dan check-out terlebih dahulu.');
       return;
@@ -499,6 +466,7 @@ function handleCheckAvailability() {
     const nights = Number.isFinite(nightsFromInput) && nightsFromInput > 0
       ? nightsFromInput
       : getNights(checkIn, checkOut);
+
     const total = hitungTotalHarga(villa, nights);
 
     if (resultArea) {
@@ -527,6 +495,7 @@ function handleCheckAvailability() {
     showError('Gagal mengecek ketersediaan villa. Silakan coba lagi.');
   }
 }
+
 // --- 9. PERHITUNGAN HARGA ---
 function hitungTotalHarga(villa, nights) {
   try {
@@ -540,6 +509,7 @@ function hitungTotalHarga(villa, nights) {
     return null;
   }
 }
+
 // --- 10. HANDLER FORM ---
 function handleFormSubmit(e) {
   e.preventDefault();
@@ -618,6 +588,7 @@ function handleFormSubmit(e) {
     showError('Terjadi kesalahan saat memproses pemesanan.');
   }
 }
+
 // --- 11. GET NIGHTS ---
 function getNights(checkIn, checkOut) {
   const start = new Date(checkIn);
@@ -625,21 +596,19 @@ function getNights(checkIn, checkOut) {
   const diff = (end - start) / (1000 * 60 * 60 * 24);
   return Math.max(1, Math.ceil(diff));
 }
+
 // --- 12. FORMAT NUMBER ---
 function formatNumber(num) {
   return new Intl.NumberFormat('id-ID').format(num);
 }
-// --- 12. FORMAT NUMBER ---
-function formatNumber(num) {
-  return new Intl.NumberFormat('id-ID').format(num);
-}
+
 // --- 13. FORMAT DATE ---
 function formatDate(dateStr) {
-  // Format YYYY-MM-DD -> DD MMM YYYY
   const d = new Date(dateStr);
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agus', 'Sept', 'Okt', 'Nov', 'Des'];
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
+
 // --- 14. LOCAL STORAGE ---
 function saveOrdersToStorage() {
   try {
@@ -652,6 +621,7 @@ function saveOrdersToStorage() {
 function loadOrdersFromStorage() {
   try {
     const stored = localStorage.getItem('villaOrders');
+
     if (stored) {
       orders = JSON.parse(stored);
       console.log(`Loaded ${orders.length} saved orders from localStorage.`);
@@ -670,6 +640,7 @@ function getLastGuest() {
     return '';
   }
 }
+
 // --- 15. ERROR HANDLER GLOBAL ---
 window.addEventListener('error', (e) => {
   console.error('Error global:', e.message);
