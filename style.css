@@ -50,8 +50,8 @@ body {
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-sm);
+  margin: 30px;
+  padding:0 20px;
 }
 
 /* ============================================
@@ -178,7 +178,7 @@ body {
 .search-input {
   flex: 1;
   padding: 0.95rem 1.1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid #d6d0ca;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
@@ -187,7 +187,7 @@ body {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(200, 140, 74, 0.7);
+  border-color: #b8aaa0;
   box-shadow: 0 0 0 4px rgba(200, 140, 74, 0.18);
   transform: translateY(-1px);
 }
@@ -382,7 +382,7 @@ body {
 .form-select {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid #d6d0ca;
   border-radius: 12px;
   font-size: 1rem;
   font-family: var(--font-main);
